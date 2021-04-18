@@ -18,6 +18,12 @@
         "containerPort": 80
       }
     ],
+    "environmentFiles": [
+      {
+        "value": "arn:aws:s3:::rahhi555-private-terraform/hair_salon_bayashi_front/.env",
+        "type": "s3"
+      }
+    ],
     "secrets": [
       {
         "name": "BASE_URL",
@@ -26,14 +32,6 @@
       {
         "name": "BROWSER_BASE_URL",
         "valueFrom": "/front/browserBaseURL"
-      },
-      {
-        "name": "FIREBASE_AUTH_KEY",
-        "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:299271904246:secret:firebase-auth-key-abAdQr"
-      },
-      {
-        "name": "FIREBASE_ADMIN_KEY",
-        "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:299271904246:secret:firebase-admin-key-15Yvjn"
       }
     ]
   },

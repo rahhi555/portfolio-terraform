@@ -1,9 +1,9 @@
 # frontのサービスに割り当てるセキュリティーグループ
 module "front_sg" {
   source = "./security_group"
-  name = "front-sg"
+  name   = "front-sg"
   vpc_id = aws_vpc.hair_salon_bayashi.id
-  port = 80
+  port   = 80
   # vpc内のみでの通信のため、インバウンドルールのcidr_blockはvpcのものを指定する
   cidr_blocks = [aws_vpc.hair_salon_bayashi.cidr_block]
 }
@@ -11,20 +11,20 @@ module "front_sg" {
 # webのサービスに割り当てるRDS用のセキュリティーグループ
 module "web_sg" {
   source = "./security_group"
-  name = "web-sg"
+  name   = "web-sg"
   vpc_id = aws_vpc.hair_salon_bayashi.id
-  port = 3306
+  port   = 3306
   # vpc内のみでの通信のため、インバウンドルールのcidr_blockはvpcのものを指定する
   cidr_blocks = [aws_vpc.hair_salon_bayashi.cidr_block]
 }
 
 # 上記のセキュリティーグループにfront用のインバウンドルール追加
 resource "aws_security_group_rule" "ingress_hair_salon_bayashi_web" {
-  type = "ingress"
-  from_port = 3000
-  to_port = 3000
-  protocol = "tcp"
-  cidr_blocks = [aws_vpc.hair_salon_bayashi.cidr_block]
+  type              = "ingress"
+  from_port         = 3000
+  to_port           = 3000
+  protocol          = "tcp"
+  cidr_blocks       = [aws_vpc.hair_salon_bayashi.cidr_block]
   security_group_id = module.web_sg.security_group_id
 }
 
@@ -41,31 +41,31 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   source_json = data.aws_iam_policy.ecs_task_execution_role_policy.policy
   statement {
     effect = "Allow"
-    # ssm及びsecrets managerで登録したパラメータをECSの環境変数として取得できる権限
-    actions = ["ssm:GetParameters", "kms:Decrypt", "secretsmanager:GetSecretValue"]
+    # ssm及びsecrets managerで登録したパラメータをECSの環境変数として取得できる権限。s3のファイルを取得する権限(.envファイル取得に使用する)
+    actions   = ["ssm:GetParameters", "kms:Decrypt", "secretsmanager:GetSecretValue", "s3:GetObject", "s3:GetBucketLocation"]
     resources = ["*"]
   }
 }
 
 # ECSタスク実行IAMロールの定義 これをタスク定義のexecution_role_arn(タスク実行IAMロール)に記入
 module "ecs_task_execution_role" {
-  source = "./iam_role"
-  name = "ecs-task-execution"
+  source     = "./iam_role"
+  name       = "ecs-task-execution"
   identifier = "ecs-tasks.amazonaws.com"
-  policy = data.aws_iam_policy_document.ecs_task_execution.json
+  policy     = data.aws_iam_policy_document.ecs_task_execution.json
 }
 
-# ECS Execポリシー及びルール作成 system maneger と security maneger のアクセス許可も追加
+#　タスクロール。ecs execをするためのaction4つを追加。
 module "ecs_for_exec" {
-  source = "./iam_role"
-  name = "ecs-for-exec"
+  source     = "./iam_role"
+  name       = "ecs-for-exec"
   identifier = "ecs-tasks.amazonaws.com"
   policy = jsonencode(
     {
       Version = "2012-10-17"
       Statement = [
         {
-          Sid = ""
+          Sid    = ""
           Effect = "Allow"
           Action = [
             "ssmmessages:CreateControlChannel",
@@ -131,7 +131,7 @@ resource "aws_ecs_cluster" "hair_salon_bayashi" {
 #     container_name = "hair_salon_bayashi_front"
 #     container_port = 80
 #   }
-  
+
 #   lifecycle {
 #     ignore_changes = [task_definition]
 #   }
@@ -175,7 +175,7 @@ resource "aws_ecs_cluster" "hair_salon_bayashi" {
 #       aws_subnet.public.id,
 #     ]
 #   }
-  
+
 #   lifecycle {
 #     ignore_changes = [task_definition]
 #   }
@@ -189,11 +189,11 @@ resource "aws_ecs_cluster" "hair_salon_bayashi" {
 
 # ECSタスク定義 1つのタスク定義の中にwebとfront詰め込み
 resource "aws_ecs_task_definition" "hair_salon_bayashi" {
-  family = "hair_salon_bayashi"
-  cpu = "512"
-  memory = "1024"
-  network_mode = "awsvpc"
-  requires_compatibilities = [ "FARGATE" ]
+  family                   = "hair_salon_bayashi"
+  cpu                      = "512"
+  memory                   = "1024"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
   # ECS ExecをするためのIAMロール
   task_role_arn = module.ecs_for_exec.iam_role_arn
   # CloudWacthにログを投げるためのタスク実行時IAMロール
@@ -204,13 +204,13 @@ resource "aws_ecs_task_definition" "hair_salon_bayashi" {
 
 # ECSサービス
 resource "aws_ecs_service" "hair_salon_bayashi" {
-  name = "hair_salon_bayashi_service"
-  cluster = aws_ecs_cluster.hair_salon_bayashi.arn
+  name            = "hair_salon_bayashi_service"
+  cluster         = aws_ecs_cluster.hair_salon_bayashi.arn
   task_definition = aws_ecs_task_definition.hair_salon_bayashi.arn
-  desired_count = 1
-  launch_type = "FARGATE"
+  desired_count   = 1
+  launch_type     = "FARGATE"
   # FARGATEを選択したときのみ適用される。デフォルトは"LATEST"。
-  platform_version = "1.4.0"
+  platform_version                  = "1.4.0"
   health_check_grace_period_seconds = 60
   # ECS Execを有効にする
   enable_execute_command = true
@@ -221,8 +221,8 @@ resource "aws_ecs_service" "hair_salon_bayashi" {
     # プライベートサブネットを割り当てるならfalseでいいが、その場合ecrからコンテナを引っ張ってくるため
     # NAT gateway 等のエンドポイントが必要になる。
     assign_public_ip = true
-    security_groups = [ module.front_sg.security_group_id,module.web_sg.security_group_id ]
-    subnets = [ 
+    security_groups  = [module.front_sg.security_group_id, module.web_sg.security_group_id]
+    subnets = [
       aws_subnet.public.id,
     ]
   }
@@ -240,7 +240,7 @@ resource "aws_ecs_service" "hair_salon_bayashi" {
     container_name = "hair_salon_bayashi_web"
     container_port = 3000
   }
-  
+
   lifecycle {
     ignore_changes = [task_definition]
   }
