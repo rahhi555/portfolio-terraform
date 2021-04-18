@@ -1,0 +1,74 @@
+[
+  {
+    "name": "hair_salon_bayashi_front",
+    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/hairsalon-bayashi-front:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "secretOptions": null,
+      "options": {
+        "awslogs-group": "/ecs/front",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "ecs-front"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "secrets": [
+      {
+        "name": "BASE_URL",
+        "valueFrom": "/front/baseURL"
+      },
+      {
+        "name": "BROWSER_BASE_URL",
+        "valueFrom": "/front/browserBaseURL"
+      },
+      {
+        "name": "FIREBASE_AUTH_KEY",
+        "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:299271904246:secret:firebase-auth-key-abAdQr"
+      },
+      {
+        "name": "FIREBASE_ADMIN_KEY",
+        "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:299271904246:secret:firebase-admin-key-15Yvjn"
+      }
+    ]
+  },
+  {
+    "name": "hair_salon_bayashi_web",
+    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/hairsalon-bayashi-web:latest",
+    "essential": true,
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 3000
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "secretOptions": null,
+      "options": {
+        "awslogs-group": "/ecs/web",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "ecs-web"
+      }
+    },
+    "secrets": [
+      {
+        "name": "FRONT_URL",
+        "valueFrom": "/web/front-url"
+      },
+      {
+        "name": "RAILS_DB_HOST",
+        "valueFrom": "/db/hostname"
+      },
+      {
+        "name": "APP_DATABASE_PASSWORD",
+        "valueFrom": "/db/raw/password"
+      }
+    ]
+  }
+]

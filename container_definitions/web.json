@@ -1,0 +1,32 @@
+[
+  {
+    "name": "hair_salon_bayashi_web",
+    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/hairsalon-bayashi-web:latest",
+    "essential": true,
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 3000
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "secretOptions": null,
+      "options": {
+        "awslogs-group": "/ecs/web",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "ecs-web"
+      }
+    },
+    "secrets": [
+      {
+        "name": "RAILS_DB_HOST",
+        "valueFrom": "/db/hostname"
+      },
+      {
+        "name": "APP_DATABASE_PASSWORD",
+        "valueFrom": "/db/raw/password"
+      }
+    ]
+  }
+]
