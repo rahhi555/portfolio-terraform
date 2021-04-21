@@ -66,6 +66,10 @@
       {
         "name": "APP_DATABASE_PASSWORD",
         "valueFrom": "/db/raw/password"
+      },
+      {
+        "name": "RAILS_MASTER_KEY",
+        "valueFrom": "/web/rails-master-key"
       }
     ]
   }

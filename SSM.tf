@@ -70,3 +70,15 @@ resource "aws_ssm_parameter" "front_url" {
     ignore_changes = [value]
   }
 }
+
+# railsのマスターキー
+resource "aws_ssm_parameter" "rails_master_key" {
+  name = "/web/rails-master-key"
+  value = "master-key"
+  type = "SecureString"
+  description = "railsのマスターキー"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
