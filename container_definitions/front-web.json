@@ -32,6 +32,10 @@
       {
         "name": "BROWSER_BASE_URL",
         "valueFrom": "/front/browserBaseURL"
+      },
+      {
+        "name": "SERVER_MIDDLEWARE_URL",
+        "valueFrom": "/front/serverMiddlewareUrl"
       }
     ]
   },

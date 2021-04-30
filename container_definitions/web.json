@@ -20,12 +20,20 @@
     },
     "secrets": [
       {
+        "name": "FRONT_URL",
+        "valueFrom": "/web/front-url"
+      },
+      {
         "name": "RAILS_DB_HOST",
         "valueFrom": "/db/hostname"
       },
       {
         "name": "APP_DATABASE_PASSWORD",
         "valueFrom": "/db/raw/password"
+      },
+      {
+        "name": "RAILS_MASTER_KEY",
+        "valueFrom": "/web/rails-master-key"
       }
     ]
   }

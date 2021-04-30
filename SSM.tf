@@ -7,7 +7,7 @@ resource "aws_ssm_parameter" "db_raw_password" {
   type = "SecureString"
   description = "データベースのパスワード"
 
-  # 手動で変更した後にterraform applyかけてもvalueが戻らないようにする
+  # 手動で変更かけた後にterraform applyして戻らないようにする
   lifecycle {
     ignore_changes = [value]
   }
@@ -21,7 +21,6 @@ resource "aws_ssm_parameter" "db_raw_hostname" {
   type = "String"
   description = "データベースのホスト名"
 
-  # 手動で変更した後にterraform applyかけてもvalueが戻らないようにする
   lifecycle {
     ignore_changes = [value]
   }
@@ -36,7 +35,6 @@ resource "aws_ssm_parameter" "base_url" {
   type = "String"
   description = "フロントエンドのbaseURL"
 
-  # 手動で変更した後にterraform applyかけてもvalueが戻らないようにする
   lifecycle {
     ignore_changes = [value]
   }
@@ -50,7 +48,19 @@ resource "aws_ssm_parameter" "browser_base_url" {
   type = "String"
   description = "フロントエンドのbaseURL"
 
-  # 手動で変更した後にterraform applyかけてもvalueが戻らないようにする
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+# フロントエンドのserverMiddlewareのurl
+resource "aws_ssm_parameter" "server_middleware_url" {
+  name = "/front/serverMiddlewareUrl"
+
+  value = "https://www.hirabayashi.work:443"
+  type = "String"
+  description = "フロントエンドのserverMiddlewareUrl"
+
   lifecycle {
     ignore_changes = [value]
   }
@@ -65,7 +75,6 @@ resource "aws_ssm_parameter" "front_url" {
   type = "String"
   description = "cors対策"
 
-  # 手動で変更した後にterraform applyかけてもvalueが戻らないようにする
   lifecycle {
     ignore_changes = [value]
   }
