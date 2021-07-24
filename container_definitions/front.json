@@ -1,7 +1,7 @@
 [
   {
-    "name": "hair_salon_bayashi_front",
-    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/hairsalon-bayashi-front:latest",
+    "name": "svg_portfolio_front",
+    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/svg-portfolio-front:latest",
     "essential": true,
     "logConfiguration": {
       "logDriver": "awslogs",
@@ -20,7 +20,7 @@
     ],
     "environmentFiles": [
       {
-        "value": "arn:aws:s3:::rahhi555-private-terraform/hair_salon_bayashi_front/.env",
+        "value": "arn:aws:s3:::rahhi555-private-terraform/svg_portfolio_front/.env",
         "type": "s3"
       }
     ],

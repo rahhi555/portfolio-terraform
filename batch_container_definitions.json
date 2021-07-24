@@ -8,7 +8,7 @@
       "options": {
         "awslogs-regions": "ap-northeast-1",
         "awslogs-stream-prefix": "batch",
-        "awslogs-group": "/ecs-scheduled-tasks/hair_salon_bayashi"
+        "awslogs-group": "/ecs-scheduled-tasks/svg_portfolio"
       }
     },
     "secrets": [

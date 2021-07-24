@@ -2,7 +2,7 @@
 module "http_sg" {
   source = "./security_group"
   name = "http-sg"
-  vpc_id = aws_vpc.hair_salon_bayashi.id
+  vpc_id = aws_vpc.svg_portfolio.id
   port = 80
   cidr_blocks = ["0.0.0.0/0"]
 }
@@ -11,7 +11,7 @@ module "http_sg" {
 module "https_sg" {
   source = "./security_group"
   name = "https-sg"
-  vpc_id = aws_vpc.hair_salon_bayashi.id
+  vpc_id = aws_vpc.svg_portfolio.id
   port = 443
   cidr_blocks = ["0.0.0.0/0"]
 }
@@ -20,13 +20,13 @@ module "https_sg" {
 module "https_api_sg" {
   source = "./security_group"
   name = "https-api-sg"
-  vpc_id = aws_vpc.hair_salon_bayashi.id
+  vpc_id = aws_vpc.svg_portfolio.id
   port = 3000
   cidr_blocks = ["0.0.0.0/0"]
 }
 
 # アプリケーションロードバランサー
-resource "aws_lb" "hair_salon_bayashi" {
+resource "aws_lb" "svg_portfolio" {
   name = "hair-salon-bayashi"
   load_balancer_type = "application"
   # インターネット向けか内部向けか。falseならインターネット向け。
@@ -54,5 +54,5 @@ resource "aws_lb" "hair_salon_bayashi" {
 }
 
 output "alb_dns_name" {
-  value = aws_lb.hair_salon_bayashi.dns_name
+  value = aws_lb.svg_portfolio.dns_name
 }

@@ -18,7 +18,7 @@ resource "aws_security_group" "default" {
 }
 
 # インバウンドルール
-resource "aws_security_group_rule" "ingress_hair_salon_bayashi" {
+resource "aws_security_group_rule" "ingress_svg_portfolio" {
   type = "ingress"
   from_port = var.port
   to_port = var.port
@@ -28,7 +28,7 @@ resource "aws_security_group_rule" "ingress_hair_salon_bayashi" {
 }
 
 # アウトバウンドルール
-resource "aws_security_group_rule" "egress_hair_salon_bayashi" {
+resource "aws_security_group_rule" "egress_svg_portfolio" {
   type = "egress"
   from_port = 0
   to_port = 0

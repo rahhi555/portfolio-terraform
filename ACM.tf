@@ -1,12 +1,12 @@
 # ssl証明書のリクエスト
-resource "aws_acm_certificate" "hair_salon_bayashi" {
+resource "aws_acm_certificate" "svg_portfolio" {
   domain_name = "www.hirabayashi.work"
   # domain_nameとは別に追加したいドメイン名がある場合は記入する。なければ空配列。
   subject_alternative_names = []
   validation_method = "DNS"
 
   tags = {
-    Name = "hair_salon_bayashi-acm"
+    Name = "svg_portfolio-acm"
   }
 
   lifecycle {
@@ -18,9 +18,9 @@ resource "aws_acm_certificate" "hair_salon_bayashi" {
 }
 
 # 検証用DNSレコード
-resource "aws_route53_record" "hair_salon_bayashi_certificate" {
+resource "aws_route53_record" "svg_portfolio_certificate" {
   for_each = {
-    for dvo in aws_acm_certificate.hair_salon_bayashi.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.svg_portfolio.domain_validation_options : dvo.domain_name => {
       name = dvo.resource_record_name
       record = dvo.resource_record_value
       type = dvo.resource_record_type
@@ -37,19 +37,19 @@ resource "aws_route53_record" "hair_salon_bayashi_certificate" {
 }
 
 # 検証の待機
-resource "aws_acm_certificate_validation" "hair_salon_bayashi" {
-  certificate_arn = aws_acm_certificate.hair_salon_bayashi.arn
-  validation_record_fqdns = [ for record in aws_route53_record.hair_salon_bayashi_certificate : record.fqdn ]
+resource "aws_acm_certificate_validation" "svg_portfolio" {
+  certificate_arn = aws_acm_certificate.svg_portfolio.arn
+  validation_record_fqdns = [ for record in aws_route53_record.svg_portfolio_certificate : record.fqdn ]
 }
 
 ###############    front側のリスナー及びターゲットグループの設定    #################
 
 # albのhttps用リスナー
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.hair_salon_bayashi.arn
+  load_balancer_arn = aws_lb.svg_portfolio.arn
   port = "443"
   protocol = "HTTPS"
-  certificate_arn = aws_acm_certificate.hair_salon_bayashi.arn
+  certificate_arn = aws_acm_certificate.svg_portfolio.arn
   ssl_policy = "ELBSecurityPolicy-2016-08"
 
   default_action {
@@ -65,7 +65,7 @@ resource "aws_lb_listener" "https" {
 
 # httpからhttpsにリダイレクトするリスナー
 resource "aws_lb_listener" "redirect_http_to_https" {
-  load_balancer_arn = aws_lb.hair_salon_bayashi.arn
+  load_balancer_arn = aws_lb.svg_portfolio.arn
   port = "80"
   protocol = "HTTP"
 
@@ -81,16 +81,16 @@ resource "aws_lb_listener" "redirect_http_to_https" {
 }
 
 # ターゲットグループ
-resource "aws_lb_target_group" "hair_salon_bayashi" {
-  name = "hair-salon-bayashi"
+resource "aws_lb_target_group" "svg_portfolio" {
+  name = "svg-portfolio"
   target_type = "ip"
-  vpc_id = aws_vpc.hair_salon_bayashi.id
+  vpc_id = aws_vpc.svg_portfolio.id
   port = 80
   protocol = "HTTP"
   deregistration_delay = 300
 
   health_check {
-    path = "/"
+    path = "/server/health-check"
     # 正常のしきい値 この回数分連続でヘルスチェックに成功すれば正常とみなされる
     healthy_threshold = 5
     # 非正常のしきい値　この回数分連続でヘルスチェックに失敗すると異常とみなされる
@@ -104,21 +104,21 @@ resource "aws_lb_target_group" "hair_salon_bayashi" {
     protocol = "HTTP"
   }
   # 依存関係を明示する
-  depends_on = [aws_lb.hair_salon_bayashi]
+  depends_on = [aws_lb.svg_portfolio]
   
   tags = {
-    Name = "hair_salon_bayashi-alb-target"
+    Name = "svg_portfolio-alb-target"
   }
 }
 
 # ターゲットグループにリクエストをフォワードするリスナールール
-resource "aws_lb_listener_rule" "hair_salon_bayashi" {
+resource "aws_lb_listener_rule" "svg_portfolio" {
   listener_arn = aws_lb_listener.https.arn
   priority = 99
 
   action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.hair_salon_bayashi.arn
+    target_group_arn = aws_lb_target_group.svg_portfolio.arn
   }
 
   condition {
@@ -133,10 +133,10 @@ resource "aws_lb_listener_rule" "hair_salon_bayashi" {
 
 # albのapi用リスナー(frontをhttpsにしているので、api側もhttpsにしないとmixed contentエラーが発生する)
 resource "aws_lb_listener" "api" {
-  load_balancer_arn = aws_lb.hair_salon_bayashi.arn
+  load_balancer_arn = aws_lb.svg_portfolio.arn
   port = "3000"
   protocol = "HTTPS"
-  certificate_arn = aws_acm_certificate.hair_salon_bayashi.arn
+  certificate_arn = aws_acm_certificate.svg_portfolio.arn
   ssl_policy = "ELBSecurityPolicy-2016-08"
 
   default_action {
@@ -151,16 +151,16 @@ resource "aws_lb_listener" "api" {
 }
 
 # ターゲットグループ(api)
-resource "aws_lb_target_group" "hair_salon_bayashi_api" {
-  name = "hair-salon-bayashi-api"
+resource "aws_lb_target_group" "svg_portfolio_api" {
+  name = "svg-portfolio-api"
   target_type = "ip"
-  vpc_id = aws_vpc.hair_salon_bayashi.id
+  vpc_id = aws_vpc.svg_portfolio.id
   port = 3000
   protocol = "HTTP"
   deregistration_delay = 300
 
   health_check {
-    path = "/api/v1/ranks"
+    path = "/health-check"
     # 正常のしきい値 この回数分連続でヘルスチェックに成功すれば正常とみなされる
     healthy_threshold = 5
     # 非正常のしきい値　この回数分連続でヘルスチェックに失敗すると異常とみなされる
@@ -174,21 +174,21 @@ resource "aws_lb_target_group" "hair_salon_bayashi_api" {
     protocol = "HTTP"
   }
   # 依存関係を明示する
-  depends_on = [aws_lb.hair_salon_bayashi]
+  depends_on = [aws_lb.svg_portfolio]
   
   tags = {
-    Name = "hair_salon_bayashi-alb-api-target"
+    Name = "svg_portfolio-alb-api-target"
   }
 }
 
 # ターゲットグループにリクエストをフォワードするリスナールール(api)
-resource "aws_lb_listener_rule" "hair_salon_bayashi_api" {
+resource "aws_lb_listener_rule" "svg_portfolio_api" {
   listener_arn = aws_lb_listener.api.arn
   priority = 98
 
   action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.hair_salon_bayashi_api.arn
+    target_group_arn = aws_lb_target_group.svg_portfolio_api.arn
   }
 
   condition {

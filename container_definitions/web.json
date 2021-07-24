@@ -1,7 +1,7 @@
 [
   {
-    "name": "hair_salon_bayashi_web",
-    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/hairsalon-bayashi-web:latest",
+    "name": "svg_portfolio_web",
+    "image": "299271904246.dkr.ecr.ap-northeast-1.amazonaws.com/svg-portfolio-web:latest",
     "essential": true,
     "portMappings": [
       {

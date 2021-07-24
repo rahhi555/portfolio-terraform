@@ -6,8 +6,8 @@ resource "aws_route53_record" "http_https" {
   type = "A"
 
   alias {
-    name = aws_lb.hair_salon_bayashi.dns_name
-    zone_id = aws_lb.hair_salon_bayashi.zone_id
+    name = aws_lb.svg_portfolio.dns_name
+    zone_id = aws_lb.svg_portfolio.zone_id
     evaluate_target_health = false
   }
 }
