@@ -18,11 +18,8 @@
         "containerPort": 80
       }
     ],
-    "environmentFiles": [
-      {
-        "value": "arn:aws:s3:::rahhi555-private-terraform/svg_portfolio_front/.env",
-        "type": "s3"
-      }
+    "command": [
+      "yarn", "start"
     ],
     "secrets": [
       {

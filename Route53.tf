@@ -1,4 +1,3 @@
-# お名前ドットコムでドメイン購入済み
 # http及びhttps用のドメイン紐付け
 resource "aws_route53_record" "http_https" {
   zone_id = "Z04693571HENT1MQSKK18"

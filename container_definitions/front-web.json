@@ -18,12 +18,6 @@
         "containerPort": 80
       }
     ],
-    "environmentFiles": [
-      {
-        "value": "arn:aws:s3:::rahhi555-private-terraform/svg_portfolio_front/.env",
-        "type": "s3"
-      }
-    ],
     "secrets": [
       {
         "name": "BASE_URL",
@@ -59,18 +53,6 @@
       }
     },
     "secrets": [
-      {
-        "name": "FRONT_URL",
-        "valueFrom": "/web/front-url"
-      },
-      {
-        "name": "RAILS_DB_HOST",
-        "valueFrom": "/db/hostname"
-      },
-      {
-        "name": "APP_DATABASE_PASSWORD",
-        "valueFrom": "/db/raw/password"
-      },
       {
         "name": "RAILS_MASTER_KEY",
         "valueFrom": "/web/rails-master-key"
