@@ -110,7 +110,7 @@ resource "aws_ecs_service" "svg_portfolio_front" {
   # FARGATEを選択したときのみ適用される。デフォルトは"LATEST"。
   platform_version = "1.4.0"
   # ヘルスチェックの猶予時間。frontはbuildとstartを実行するためかなり長めにとっておかないとヘルスチェックに失敗する。
-  health_check_grace_period_seconds = 180
+  health_check_grace_period_seconds = 600
   # ECS Execを有効にする
   enable_execute_command = true
 
