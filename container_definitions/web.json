@@ -19,7 +19,7 @@
       }
     },
     "command": [
-      "rails", "s", "-b", "0.0.0.0"
+      "rake", "cmd:setup"
     ],
     "environment": [
       {
