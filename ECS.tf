@@ -19,7 +19,7 @@ module "web_sg" {
 }
 
 # 上記のセキュリティーグループにfront用のインバウンドルール追加
-resource "aws_security_group_rule" "ingress_svg_portfolio_web" {
+resource "aws_security_group_rule" "ingress_svg_portfolio_web_front" {
   type              = "ingress"
   from_port         = 3000
   to_port           = 3000
@@ -28,6 +28,15 @@ resource "aws_security_group_rule" "ingress_svg_portfolio_web" {
   security_group_id = module.web_sg.security_group_id
 }
 
+# 上記のセキュリティーグループにRedis用のインバウンドルール追加
+resource "aws_security_group_rule" "ingress_svg_portfolio_web_redis" {
+  type              = "ingress"
+  from_port         = 6379
+  to_port           = 6379
+  protocol          = "tcp"
+  cidr_blocks       = [aws_vpc.svg_portfolio.cidr_block]
+  security_group_id = module.web_sg.security_group_id
+}
 
 # ECSタスク実行IAMロールを取得し、ECRの操作権限を付与できるようにする
 # AmazonECSTaskExecutionRolePolicyの取得
