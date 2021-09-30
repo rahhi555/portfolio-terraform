@@ -32,8 +32,8 @@ resource "aws_elasticache_replication_group" "svg_portfolio" {
   engine = "redis"
   engine_version = "6.x"
   # プライマリノードとレプリカノードの合計値。2ならプライマリ1、レプリカ1になる。
-  number_cache_clusters = 2
-  node_type = "cache.m3.medium"
+  number_cache_clusters = 1
+  node_type = "cache.t2.small"
   # 障害が起きた時自動フェイルオーバーによって運用を維持する。マルチAZしていることが前提。
   automatic_failover_enabled = false
   port = 6379
