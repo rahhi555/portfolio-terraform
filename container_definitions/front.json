@@ -33,6 +33,10 @@
       {
         "name": "SERVER_MIDDLEWARE_URL",
         "valueFrom": "/front/serverMiddlewareUrl"
+      },
+      {
+        "valueFrom": "/front/actionCableUrl",
+        "name": "ACTION_CABLE_URL"
       }
     ]
   }

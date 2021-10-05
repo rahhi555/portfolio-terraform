@@ -38,6 +38,18 @@ resource "aws_ssm_parameter" "server_middleware_url" {
   }
 }
 
+# フロントエンドで使用するActionCableエンドポイント
+resource "aws_ssm_parameter" "action_cable_url" {
+  name = "/front/actionCableUrl"
+  value = "wss://www.hirabayashi.work:3000/cable"
+  type = "String"
+  description = "フロントエンドのアクションケーブルURL"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
 # railsのマスターキー
 resource "aws_ssm_parameter" "rails_master_key" {
   name = "/web/rails-master-key"
