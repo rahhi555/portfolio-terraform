@@ -35,8 +35,12 @@
         "valueFrom": "/front/serverMiddlewareUrl"
       },
       {
-        "valueFrom": "/front/actionCableUrl",
-        "name": "ACTION_CABLE_URL"
+        "name": "ACTION_CABLE_URL",
+        "valueFrom": "/front/actionCableUrl"
+      },
+      {
+        "name": "GOOGLE_MAPS_API_KEY",
+        "valueFrom": "/front/googleMapsApiKey"
       }
     ]
   }

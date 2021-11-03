@@ -61,3 +61,11 @@ resource "aws_ssm_parameter" "rails_master_key" {
     ignore_changes = [value]
   }
 }
+
+# GoogleMapsApiキー
+resource "aws_ssm_parameter" "google_maps_api_key" {
+  name = "/front/googleMapsApiKey"
+  value = "google maps api key"
+  type = "SecureString"
+  description = "google maps apiのキー"
+}
