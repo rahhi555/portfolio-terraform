@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   source_json = data.aws_iam_policy.ecs_task_execution_role_policy.policy
   statement {
     effect = "Allow"
-    # ssm及びsecrets managerで登録したパラメータをECSの環境変数として取得できる権限。s3のファイルを取得する権限(.envファイル取得に使用する)
+    # ssm及びsecrets managerで登録したパラメータをECSの環境変数として取得できる権限。s3のファイルを取得する権限(.envファイル取得に使用する)
     actions   = ["ssm:GetParameters", "kms:Decrypt", "secretsmanager:GetSecretValue", "s3:GetObject", "s3:GetBucketLocation"]
     resources = ["*"]
   }
@@ -119,7 +119,7 @@ resource "aws_ecs_service" "svg_portfolio_front" {
   # FARGATEを選択したときのみ適用される。デフォルトは"LATEST"。
   platform_version = "1.4.0"
   # ヘルスチェックの猶予時間。frontはbuildとstartを実行するためかなり長めにとっておかないとヘルスチェックに失敗する。
-  health_check_grace_period_seconds = 600
+  health_check_grace_period_seconds = 900
   # ECS Execを有効にする
   enable_execute_command = true
 
