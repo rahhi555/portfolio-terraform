@@ -68,4 +68,8 @@ resource "aws_ssm_parameter" "google_maps_api_key" {
   value = "google maps api key"
   type = "SecureString"
   description = "google maps apiのキー"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
 }

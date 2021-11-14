@@ -30,7 +30,7 @@ resource "aws_elasticache_replication_group" "svg_portfolio" {
   replication_group_id = "svg-portfolio"
   replication_group_description = "Cluster Disabled"
   engine = "redis"
-  engine_version = "6.x"
+  engine_version = "6.0.5"
   # プライマリノードとレプリカノードの合計値。2ならプライマリ1、レプリカ1になる。
   number_cache_clusters = 1
   node_type = "cache.t2.small"
