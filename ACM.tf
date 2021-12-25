@@ -1,6 +1,6 @@
 # ssl証明書のリクエスト
 resource "aws_acm_certificate" "svg_portfolio" {
-  domain_name = "www.hirabayashi.work"
+  domain_name = "www.minimap.work"
   # domain_nameとは別に追加したいドメイン名がある場合は記入する。なければ空配列。
   subject_alternative_names = []
   validation_method = "DNS"
@@ -33,7 +33,7 @@ resource "aws_route53_record" "svg_portfolio_certificate" {
   ttl = 60
   type = each.value.type
   # hirabayahsi.workのホストゾーンID(ブラウザのRoute53から確認)
-  zone_id = "Z04693571HENT1MQSKK18"
+  zone_id = aws_route53_zone.svg_portfolio_route53_zone.zone_id
 }
 
 # 検証の待機

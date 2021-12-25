@@ -29,7 +29,7 @@ resource "aws_s3_bucket" "public" {
   # データが残っていても削除可能
   force_destroy = true
   cors_rule {
-    allowed_origins = ["https://www.hirabayashi.work"]
+    allowed_origins = ["https://www.minimap.work"]
     allowed_methods = ["GET"]
     allowed_headers = ["*"]
     max_age_seconds = 3000

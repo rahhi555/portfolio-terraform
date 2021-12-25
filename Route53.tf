@@ -1,6 +1,10 @@
+resource "aws_route53_zone" "svg_portfolio_route53_zone" {
+  name = "minimap.work"
+}
+
 # http及びhttps用のドメイン紐付け
 resource "aws_route53_record" "http_https" {
-  zone_id = "Z04693571HENT1MQSKK18"
+  zone_id = aws_route53_zone.svg_portfolio_route53_zone.zone_id
   name = "www"
   type = "A"
 
